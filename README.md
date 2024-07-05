@@ -1,3 +1,24 @@
+<p>Instalação dos Pacotes</p>
+-composer require laravel/ui
+- php artisan ui bootstrap --auth
+- npm install
+- npm install jquery
+- npm run dev
+
+<p>Estrutura do Banco de Dados (Migrations)</p>
+- Categorias        => php artisan make:migration create_categories_table
+- Subcategorias     => php artisan make:migration create_subcategories_table
+- Produtos          => php artisan make:migration create_products_table
+- Marcas            => php artisan make:migration create_brands_table
+- Logs              => php artisan make:migration create_logs_table
+
+
+
+
+
+
+
+
 <p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
 
 <p align="center">
