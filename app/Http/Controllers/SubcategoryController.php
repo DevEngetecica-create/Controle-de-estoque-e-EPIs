@@ -2,17 +2,25 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Log;
+use App\Models\Subcategory;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class SubcategoryController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        //
+        $search = $request->input('search');
+
+        $subcategories = Subcategory::where('name', 'like', "%{$search}%")->paginate(10);
+
+        return view('subcategories.index', compact('subcategories', 'search'));
     }
+
 
     /**
      * Show the form for creating a new resource.
@@ -27,8 +35,28 @@ class SubcategoryController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'color' => 'required|string|max:7',
+            'category_id' => 'required|exists:categories,id',
+        ]);
+
+        try {
+            $subcategory = new Subcategory();
+            $subcategory->name = $request->name;
+            $subcategory->color = $request->color;
+            $subcategory->category_id = $request->category_id;
+            $subcategory->created_by = Auth::user()->email;
+            $subcategory->save();
+
+            Log::create(['action' => 'Subcategory created', 'user_email' => Auth::user()->email]);
+
+            return redirect()->route('subcategories.index')->with('success', 'Subcategoria cadastrada com sucesso.');
+        } catch (\Exception $e) {
+            return redirect()->route('subcategories.index')->with('error', 'Erro ao cadastrar subcategoria.');
+        }
     }
+
 
     /**
      * Display the specified resource.
@@ -49,16 +77,49 @@ class SubcategoryController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, Subcategory $subcategory)
     {
-        //
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'color' => 'required|string|max:7',
+            'category_id' => 'required|exists:categories,id',
+        ]);
+
+        try {
+            $subcategory->name = $request->name;
+            $subcategory->color = $request->color;
+            $subcategory->category_id = $request->category_id;
+            $subcategory->updated_by = Auth::user()->email;
+            $subcategory->save();
+
+            Log::create(['action' => 'Subcategory updated', 'user_email' => Auth::user()->email]);
+
+            return redirect()->route('subcategories.index')->with('success', 'Subcategoria atualizada com sucesso.');
+        } catch (\Exception $e) {
+
+            return redirect()->route('subcategories.index')->with('error', 'Erro ao atualizar subcategoria.');
+        }
     }
+
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(Subcategory $subcategory)
     {
-        //
+        try {
+            if ($subcategory->products()->count() > 0) {
+                return redirect()->route('subcategories.index')->with('warning', 'Não é possível excluir uma subcategoria com produtos cadastrados.');
+            }
+
+            $subcategory->delete();
+
+            Log::create(['action' => 'Subcategory deleted', 'user_email' => Auth::user()->email]);
+
+            return redirect()->route('subcategories.index')->with('success', 'Subcategoria excluída com sucesso.');
+        } catch (\Exception $e) {
+
+            return redirect()->route('subcategories.index')->with('error', 'Erro ao excluir subcategoria.');
+        }
     }
 }

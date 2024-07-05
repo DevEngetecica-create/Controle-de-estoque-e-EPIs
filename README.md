@@ -1,30 +1,42 @@
 <p>Instalação dos Pacotes</p>
--composer require laravel/ui
-- php artisan ui bootstrap --auth
-- npm install
-- npm install jquery
+-composer require laravel/ui <br>
+- php artisan ui bootstrap --auth<br>
+- npm install<br>
+- npm install jquery<br>
 - npm run dev
 
+<hr>
+
 <p>Estrutura do Banco de Dados (Migrations)</p>
-- Categorias        => php artisan make:migration create_categories_table
-- Subcategorias     => php artisan make:migration create_subcategories_table
-- Produtos          => php artisan make:migration create_products_table
-- Marcas            => php artisan make:migration create_brands_table
-- Logs              => php artisan make:migration create_logs_table
+- Categorias        => php artisan make:migration create_categories_table <br>
+- Subcategorias     => php artisan make:migration create_subcategories_table <br>
+- Produtos          => php artisan make:migration create_products_table <br>
+- Marcas            => php artisan make:migration create_brands_table <br>
+- Logs              => php artisan make:migration create_logs_table 
+
+<hr>
+
 
 <p> Criação dos Controladores e Rotas</p>
-php artisan make:controller CategoryController --resource
-php artisan make:controller SubcategoryController --resource
-php artisan make:controller ProductController --resource
-php artisan make:controller BrandController --resource
+php artisan make:controller CategoryController --resource<br>
+php artisan make:controller SubcategoryController --resource <br>
+php artisan make:controller ProductController --resource <br>
+php artisan make:controller BrandController --resource <br>
 php artisan make:controller LogController --resource
 
+<hr>
 
+<p>Implementação do Repository Pattern</p>
+php artisan make:interface CategoryRepositoryInterface <br>
+php artisan make:repository CategoryRepository <br>
+php artisan make:interface SubcategoryRepositoryInterface <br>
+php artisan make:repository SubcategoryRepository <br>
+php artisan make:interface ProductRepositoryInterface <br>
+php artisan make:repository ProductRepository <br>
+php artisan make:interface BrandRepositoryInterface <br>
+php artisan make:repository BrandRepository
 
-
-
-
-
+<hr>
 
 <p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
 
