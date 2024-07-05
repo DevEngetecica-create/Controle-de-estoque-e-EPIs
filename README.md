@@ -12,6 +12,13 @@
 - Marcas            => php artisan make:migration create_brands_table
 - Logs              => php artisan make:migration create_logs_table
 
+<p> Criação dos Controladores e Rotas</p>
+php artisan make:controller CategoryController --resource
+php artisan make:controller SubcategoryController --resource
+php artisan make:controller ProductController --resource
+php artisan make:controller BrandController --resource
+php artisan make:controller LogController --resource
+
 
 
 
