@@ -6,29 +6,26 @@ use App\Models\Log;
 use App\Models\Product;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use App\Repositories\Interfaces\ProductRepositoryInterface;
 
 class ProductController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
+
+    protected $productRepository;
+
+    public function __construct(ProductRepositoryInterface $productRepository)
+    {
+        $this->productRepository = $productRepository;
+    }
     public function index(Request $request)
     {
         $search = $request->input('search');
-
-        $products = Product::with(['category', 'subcategory', 'brand'])
-            ->where('name', 'like', "%{$search}%")
-            ->orWhereHas('category', function ($query) use ($search) {
-                $query->where('name', 'like', "%{$search}%");
-            })
-            ->orWhereHas('subcategory', function ($query) use ($search) {
-                $query->where('name', 'like', "%{$search}%");
-            })
-            ->paginate(10);
-
+        $products = $this->productRepository->paginate(10, $search);
         return view('products.index', compact('products', 'search'));
     }
-
 
     /**
      * Show the form for creating a new resource.

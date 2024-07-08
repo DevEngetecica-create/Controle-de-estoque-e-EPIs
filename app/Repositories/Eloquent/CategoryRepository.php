@@ -12,6 +12,11 @@ class CategoryRepository implements CategoryRepositoryInterface
         return Category::all();
     }
 
+    public function paginate($perPage = 10, $search = null)
+    {
+        return Category::where('name', 'like', "%{$search}%")->paginate($perPage);
+    }
+
     public function find($id)
     {
         return Category::find($id);
@@ -31,4 +36,6 @@ class CategoryRepository implements CategoryRepositoryInterface
     {
         return $category->delete();
     }
+
+    
 }

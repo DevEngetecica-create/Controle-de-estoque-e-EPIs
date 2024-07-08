@@ -6,18 +6,24 @@ use App\Models\Category;
 use App\Models\Log;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use App\Repositories\Interfaces\CategoryRepositoryInterface;
 
 class CategoryController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
+    protected $categoryRepository;
+
+    public function __construct(CategoryRepositoryInterface $categoryRepository)
+    {
+        $this->categoryRepository = $categoryRepository;
+    }
+
     public function index(Request $request)
     {
         $search = $request->input('search');
-
-        $categories = Category::where('name', 'like', "%{$search}%")->paginate(10);
-
+        $categories = $this->categoryRepository->paginate(10, $search);
         return view('categories.index', compact('categories', 'search'));
     }
 
