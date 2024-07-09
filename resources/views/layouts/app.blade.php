@@ -28,6 +28,9 @@
     <!-- Toastr CSS -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
 
+    <!--select2-->
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+
 
     <!-- Scripts -->
     @vite(['resources/sass/app.scss', 'resources/js/app.js'])
@@ -104,12 +107,16 @@
     <!-- Toastr JS -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
 
+    <!--select2-->
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+
+
     @if(Session::has('success'))
-        <script>
-            $(document).ready(function() {
-                toastr["success"]("I do not think that means what you think it means.")
-            })
-        </script>
+    <script>
+        $(document).ready(function() {
+            toastr["success"]("I do not think that means what you think it means.")
+        })
+    </script>
     @endif
 
     <script>
@@ -137,14 +144,17 @@
                 "showMethod": "fadeIn",
                 "hideMethod": "fadeOut"
             }
-            
+
             //colorir a div da categoria
             $('#colorInput').on('input', function() {
                 var color = $(this).val();
                 $('#colorDiv').css('background-color', color);
             });
 
+            // Inicializa o Select2
+            $('#category_id').select2();
 
+            
         });
     </script>
 

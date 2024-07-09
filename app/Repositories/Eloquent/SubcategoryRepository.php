@@ -35,6 +35,6 @@ class SubcategoryRepository implements SubcategoryRepositoryInterface
 
     public function paginate($perPage = 10, $search = null)
     {
-        return Subcategory::where('name', 'like', "%{$search}%")->paginate($perPage);
+        return Subcategory::where('name', 'like', "%{$search}%")->orderBy('id', 'desc')->paginate($perPage);
     }
 }

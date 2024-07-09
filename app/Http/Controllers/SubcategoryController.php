@@ -2,23 +2,33 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Category;
 use App\Models\Log;
 use App\Models\Subcategory;
+use App\Repositories\Interfaces\CategoryRepositoryInterface;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use App\Repositories\Interfaces\SubcategoryRepositoryInterface;
 
 class SubcategoryController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
+    protected $subcategoryRepository;
+    protected $categoryRepository;
+
+    public function __construct(SubcategoryRepositoryInterface $subcategoryRepository, CategoryRepositoryInterface $categoryRepository)
+    {
+        $this->subcategoryRepository = $subcategoryRepository;
+        $this->categoryRepository = $categoryRepository;
+    }
+
     public function index(Request $request)
     {
         $search = $request->input('search');
-
-        $subcategories = Subcategory::where('name', 'like', "%{$search}%")->paginate(10);
-
-        return view('subcategories.index', compact('subcategories', 'search'));
+        $subcategories = $this->subcategoryRepository->paginate(10, $search);
+        return view('products.subcategories.index', compact('subcategories', 'search'));
     }
 
 
@@ -27,8 +37,11 @@ class SubcategoryController extends Controller
      */
     public function create()
     {
-        //
+        $categories = Category::all();
+
+        return view('products.subcategories.create', compact('categories'));
     }
+
 
     /**
      * Store a newly created resource in storage.
@@ -37,7 +50,7 @@ class SubcategoryController extends Controller
     {
         $request->validate([
             'name' => 'required|string|max:255',
-            'color' => 'required|string|max:7',
+            'color' => 'required|string|max:10',
             'category_id' => 'required|exists:categories,id',
         ]);
 
@@ -69,11 +82,13 @@ class SubcategoryController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit($id)
     {
-        //
+        $subcategory = Subcategory::find($id);
+        $categories = Category::all();
+        
+        return view('products.subcategories.edit', compact('subcategory', 'categories'));
     }
-
     /**
      * Update the specified resource in storage.
      */
@@ -95,6 +110,7 @@ class SubcategoryController extends Controller
             Log::create(['action' => 'Subcategory updated', 'user_email' => Auth::user()->email]);
 
             return redirect()->route('subcategories.index')->with('success', 'Subcategoria atualizada com sucesso.');
+
         } catch (\Exception $e) {
 
             return redirect()->route('subcategories.index')->with('error', 'Erro ao atualizar subcategoria.');
