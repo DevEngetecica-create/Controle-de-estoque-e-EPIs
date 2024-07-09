@@ -23,14 +23,14 @@ class SubcategoryRepository implements SubcategoryRepositoryInterface
         return Subcategory::create($data);
     }
 
-    public function update(Subcategory $category, array $data)
+    public function update(Subcategory $subcategory, array $data)
     {
-        return $category->update($data);
+        return $subcategory->update($data);
     }
 
-    public function delete(Subcategory $category)
+    public function delete(Subcategory $subcategory)
     {
-        return $category->delete();
+        return $subcategory->delete();
     }
 
     public function paginate($perPage = 10, $search = null)

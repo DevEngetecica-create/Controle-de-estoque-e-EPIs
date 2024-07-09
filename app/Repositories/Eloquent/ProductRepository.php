@@ -1,6 +1,5 @@
 <?php
 
-// app/Repositories/Eloquent/ProductRepository.php
 namespace App\Repositories\Eloquent;
 
 use App\Models\Product;
