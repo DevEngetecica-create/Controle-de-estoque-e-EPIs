@@ -14,7 +14,7 @@ class CategoryRepository implements CategoryRepositoryInterface
 
     public function paginate($perPage = 10, $search = null)
     {
-        return Category::where('name', 'like', "%{$search}%")->paginate($perPage);
+        return Category::where('name', 'like', "%{$search}%")->orderBy('id', 'desc')->paginate($perPage);
     }
 
     public function find($id)

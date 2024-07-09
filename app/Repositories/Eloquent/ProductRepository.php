@@ -33,6 +33,7 @@ class ProductRepository implements ProductRepositoryInterface
     {
         return Product::find($id);
     }
+    
 
     public function create(array $data)
     {
