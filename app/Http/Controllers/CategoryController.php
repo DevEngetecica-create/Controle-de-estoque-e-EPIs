@@ -33,7 +33,7 @@ class CategoryController extends Controller
      */
     public function create()
     {
-        //
+        return view('products.categories.create');
     }
 
     /**
@@ -55,9 +55,9 @@ class CategoryController extends Controller
 
             Log::create(['action' => 'Category created', 'user_email' => Auth::user()->email]);
 
-            return redirect()->route('products.categories.index')->with('success', 'Categoria cadastrada com sucesso.');
+            return redirect()->route('categories.index')->with('success', 'Categoria cadastrada com sucesso.');
         } catch (\Exception $e) {
-            return redirect()->route('products.categories.index')->with('error', 'Erro ao cadastrar categoria.');
+            return redirect()->route('categories.index')->with('error', 'Erro ao cadastrar categoria.');
         }
     }
 
@@ -66,15 +66,20 @@ class CategoryController extends Controller
      */
     public function show(string $id)
     {
-        //
+        $category = Category::find($id);
+        
+        return view('products.categories.show', compact('category'));
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    
+    public function edit($id)
     {
-        //
+        $category = Category::find($id);
+        
+        return view('products.categories.edit', compact('category'));
     }
 
     /**
