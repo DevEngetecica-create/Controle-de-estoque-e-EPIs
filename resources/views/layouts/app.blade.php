@@ -106,33 +106,34 @@
 
 
     <script>
-
         $(document).ready(function() {
             // Aplica a máscara do Real
 
             $('#unit_price').mask('000.000.000.000.000,00', {
                 reverse: true
             });
-        });
-/* 
-        function previewImage(event) {
-            var reader = new FileReader();
-            reader.onload = function() {
-                var output = document.getElementById('image');
-                output.src = reader.result;
-            }
-            reader.readAsDataURL(event.target.files[0]);
-        } */
 
-        @if(Session::has('success'))
-        toastr.success("{{ Session::get('success') }}");
-        @elseif(Session::has('error'))
-        toastr.error("{{ Session::get('error') }}");
-        @elseif(Session::has('warning'))
-        toastr.warning("{{ Session::get('warning') }}");
-        @elseif(Session::has('info'))
-        toastr.info("{{ Session::get('info') }}");
-        @endif
+            /* 
+                    function previewImage(event) {
+                        var reader = new FileReader();
+                        reader.onload = function() {
+                            var output = document.getElementById('image');
+                            output.src = reader.result;
+                        }
+                        reader.readAsDataURL(event.target.files[0]);
+                    } */
+
+            @if(Session::has('success'))
+            toastr.success("{{ Session::get('success') }}");
+            @elseif(Session::has('error'))
+            toastr.error("{{ Session::get('error') }}");
+            @elseif(Session::has('warning'))
+            toastr.warning("{{ Session::get('warning') }}");
+            @elseif(Session::has('info'))
+            toastr.info("{{ Session::get('info') }}");
+            @endif
+
+        });
     </script>
 
 </body>

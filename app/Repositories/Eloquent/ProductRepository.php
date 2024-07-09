@@ -25,6 +25,7 @@ class ProductRepository implements ProductRepositoryInterface
             ->orWhereHas('brand', function ($query) use ($search) {
                 $query->where('name', 'like', "%{$search}%");
             })
+            ->orderBy('id', 'desc')
             ->paginate($perPage);
     }
 

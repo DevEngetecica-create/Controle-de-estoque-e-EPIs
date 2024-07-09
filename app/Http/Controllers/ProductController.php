@@ -93,54 +93,42 @@ class ProductController extends Controller
 
             if ($request->file('image')) {
 
-                //valida a extensão da imagem
+                // Valida a extensão da imagem
                 $request->validate([
                     'image' => 'mimes:png,jpg,jpeg,svg|max:2048'
                 ], [
-                    'image.mimes' => 'A imagem enviada possui extensão invalida. O Sistema aceita apenas as extensões "png, jpg, jpeg, svg"'
+                    'image.mimes' => 'A imagem enviada possui extensão inválida. O sistema aceita apenas as extensões "png, jpg, jpeg, svg"'
                 ]);
 
+                // Obtém o nome da imagem
+                $imageName = $request->file('image')->getClientOriginalName();
 
-                // obtem o nome da imagem
-                $imageName = $request->file('image')->getClientOriginalName(); // obtem o nome da imagem
+                $data = $request->all();
+                $data['created_by'] = Auth::user()->email;
+                $data['image'] = $imageName;
 
+                // Primeiro, cria o produto no banco de dados para obter o ID
+                $product = $this->productRepository->create($data);
 
-            $product = new Product();
-            $product->name = $request->name;
-            $product->quantity = $request->quantity;
-            $product->unit_price = $request->unit_price;
-            $product->expiry_date = $request->expiry_date;
-            $product->category_id = $request->category_id;
-            $product->subcategory_id = $request->subcategory_id;
-            $product->image = $imageName;
-            $product->minimum_stock = $request->minimum_stock;
-            $product->unit = $request->unit;
-            $product->brand_id = $request->brand_id;
-            $product->created_by = Auth::user()->email;
-            $product->save();
-
-           
-
-                // obtem o objeto do arquivo arquivo da imagem
+                // Obtém o objeto do arquivo da imagem
                 $imagePath = $request->file('image');
 
-                // o caminho onde será salvo a imagem
+                // O caminho onde será salvo a imagem
                 $targetDir = public_path("build/assets/images/product/{$product->id}");
 
-                //move o upload da imagem para a pasta pública
+                // Cria o diretório se não existir
+                if (!file_exists($targetDir)) {
+                    mkdir($targetDir, 0755, true);
+                }
+
+                // Move o upload da imagem para a pasta pública
                 $imagePath->move($targetDir, $imageName);
             }
-
-            /*  if ($request->hasFile('image')) {
-                $path = $request->file('image')->store('images', 'public');
-                $data['image'] = $path;
-            } */
 
             Log::create(['action' => 'Product created', 'user_email' => Auth::user()->email]);
 
             return redirect()->route('products.index')->with('success', 'Produto cadastrado com sucesso.');
         } catch (\Exception $e) {
-
             return redirect()->route('products.index')->with('error', 'Erro ao cadastrar produto.');
         }
     }
@@ -173,8 +161,11 @@ class ProductController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Product $product)
+    public function update(Request $request, $id)
     {
+        // Remove pontos e substitui vírgula por ponto para converter o valor em um float
+        $request->merge(['unit_price' => str_replace(['.', ','], ['', '.'], $request->unit_price)]);
+
         $request->validate([
             'name' => 'required|string|max:255',
             'quantity' => 'required|integer',
@@ -182,42 +173,44 @@ class ProductController extends Controller
             'expiry_date' => 'required|date',
             'category_id' => 'required|exists:categories,id',
             'subcategory_id' => 'required|exists:subcategories,id',
-            'image' => 'nullable|string',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
             'minimum_stock' => 'required|integer',
             'unit' => 'required|string|max:255',
             'brand_id' => 'required|exists:brands,id',
         ]);
 
         try {
+            $product = $this->productRepository->find($id);
+            $data = $request->all();
+            $data['updated_by'] = Auth::user()->email;
 
-
-
-            $product->name = $request->name;
-            $product->quantity = $request->quantity;
-            $product->unit_price = $request->unit_price;
-            $product->expiry_date = $request->expiry_date;
-            $product->category_id = $request->category_id;
-            $product->subcategory_id = $request->subcategory_id;
-            $product->image = $request->image;
-            $product->minimum_stock = $request->minimum_stock;
-            $product->unit = $request->unit;
-            $product->brand_id = $request->brand_id;
-            $product->updated_by = Auth::user()->email;
-            $product->save();
+            $imagePath = public_path("build/assets/images/product/{$product->id}");
 
             if ($request->hasFile('image')) {
                 // Deletar a imagem antiga se existir
                 if ($product->image) {
-                    Storage::disk('public')->delete($product->image);
+                    $oldImage = $imagePath . '/' . $product->image;
+                    if (file_exists($oldImage)) {
+                        unlink($oldImage);
+                    }
                 }
+
                 // Salvar a nova imagem
-                $path = $request->file('image')->store('images', 'public');
-                $data['image'] = $path;
+                $file = $request->file('image');
+                $filename = time() . '_' . $file->getClientOriginalName();
+                $file->move($imagePath, $filename);
+                $data['image'] = $filename;
             } else {
                 // Se não houver nova imagem, mantenha a antiga
                 unset($data['image']);
             }
-            Log::create(['action' => 'Product updated', 'user_email' => Auth::user()->email]);
+
+            $this->productRepository->update($product, $data);
+
+            Log::create([
+                'action' => 'Product updated',
+                'user_email' => Auth::user()->email,
+            ]);
 
             return redirect()->route('products.index')->with('success', 'Produto atualizado com sucesso.');
         } catch (\Exception $e) {
@@ -229,10 +222,27 @@ class ProductController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Product $product)
+    public function destroy($id)
     {
         try {
-            $product->delete();
+            $product = $this->productRepository->find($id);
+
+            // O caminho onde a imagem está salva
+            $imagePath = public_path("build/assets/images/product/{$product->id}/" . $product->image);
+
+            // Deletar a imagem se existir
+            if (file_exists($imagePath)) {
+                unlink($imagePath);
+            }
+
+            // Deletar o diretório do produto se estiver vazio
+            $productDir = public_path("build/assets/images/product/{$product->id}");
+            if (is_dir($productDir) && count(scandir($productDir)) == 2) { // diretório está vazio
+                rmdir($productDir);
+            }
+
+            // Deletar o registro do produto
+            $this->productRepository->delete($product);
 
             Log::create(['action' => 'Product deleted', 'user_email' => Auth::user()->email]);
 

@@ -43,7 +43,12 @@
                         <td class="d-flex text-center">
                             <a href="{{ route('products.show', $product->id) }}" class="btn btn-primary btn-sm"><i class="far fa-eye"></i></a>
                             <a href="{{ route('products.edit', $product->id) }}" class="btn btn-secondary btn-sm mx-2"><i class="fas fa-pencil-alt"></i></a>
-                            <button class="btn btn-danger btn-sm"><i class="fas fa-trash-alt"></i></button>
+
+                            <form action="{{ route('products.destroy', $product->id) }}" method="POST" onsubmit="return confirm('Tem certeza que deseja excluir este produto?')">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" class="btn btn-danger btn-sm"><i class="fas fa-trash-alt"></i></button>
+                            </form>
                         </td>
                     </tr>
                     @endforeach
