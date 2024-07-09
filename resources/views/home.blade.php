@@ -9,12 +9,24 @@
 
                 <div class="card-body">
                     @if (session('status'))
-                        <div class="alert alert-success" role="alert">
-                            {{ session('status') }}
-                        </div>
+                    <div class="alert alert-success" role="alert">
+                        {{ session('status') }}
+                    </div>
                     @endif
 
-                    {{ __('You are logged in!') }}
+                    <a href="{{route('products.index')}}">
+                        <button class="btn btn-primary">Produtos</button>
+                    </a>
+                    <a href="{{route('categories.index')}}">
+                        <button class="btn btn-warning mx-3">Categorias</button>
+                    </a>
+                    <a href="{{route('subcategories.index')}}">
+                        <button class="btn btn-info">Subcategorias</button>
+                    </a>
+                    <a href="{{route('brands.index')}}">
+                        <button class="btn btn-success mx-3">Subcategorias</button>
+                    </a>
+                    
                 </div>
             </div>
         </div>

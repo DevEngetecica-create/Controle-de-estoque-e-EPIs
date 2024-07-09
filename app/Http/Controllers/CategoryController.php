@@ -24,7 +24,7 @@ class CategoryController extends Controller
     {
         $search = $request->input('search');
         $categories = $this->categoryRepository->paginate(10, $search);
-        return view('categories.index', compact('categories', 'search'));
+        return view('products.categories.index', compact('categories', 'search'));
     }
 
 
@@ -55,9 +55,9 @@ class CategoryController extends Controller
 
             Log::create(['action' => 'Category created', 'user_email' => Auth::user()->email]);
 
-            return redirect()->route('categories.index')->with('success', 'Categoria cadastrada com sucesso.');
+            return redirect()->route('products.categories.index')->with('success', 'Categoria cadastrada com sucesso.');
         } catch (\Exception $e) {
-            return redirect()->route('categories.index')->with('error', 'Erro ao cadastrar categoria.');
+            return redirect()->route('products.categories.index')->with('error', 'Erro ao cadastrar categoria.');
         }
     }
 
@@ -95,9 +95,9 @@ class CategoryController extends Controller
 
             Log::create(['action' => 'Category updated', 'user_email' => Auth::user()->email]);
 
-            return redirect()->route('categories.index')->with('success', 'Categoria atualizada com sucesso.');
+            return redirect()->route('products.categories.index')->with('success', 'Categoria atualizada com sucesso.');
         } catch (\Exception $e) {
-            return redirect()->route('categories.index')->with('error', 'Erro ao atualizar categoria.');
+            return redirect()->route('products.categories.index')->with('error', 'Erro ao atualizar categoria.');
         }
     }
 
@@ -116,9 +116,9 @@ class CategoryController extends Controller
 
             Log::create(['action' => 'Category deleted', 'user_email' => Auth::user()->email]);
 
-            return redirect()->route('categories.index')->with('success', 'Categoria excluída com sucesso.');
+            return redirect()->route('products.categories.index')->with('success', 'Categoria excluída com sucesso.');
         } catch (\Exception $e) {
-            return redirect()->route('categories.index')->with('error', 'Erro ao excluir categoria.');
+            return redirect()->route('products.categories.index')->with('error', 'Erro ao excluir categoria.');
         }
     }
 }
