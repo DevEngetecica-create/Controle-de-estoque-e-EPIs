@@ -43,7 +43,7 @@ class CategoryController extends Controller
     {
         $request->validate([
             'name' => 'required|string|max:255',
-            'color' => 'required|string|max:7',
+            'color' => 'required|string|max:10',
         ]);
 
         try {
