@@ -18,14 +18,19 @@
                             <label for="quantity">Quantidade</label>
                             <input type="number" class="form-control" id="quantity" name="quantity" value="{{ $product->quantity }}">
                         </div>
+
                         <div class="form-group">
-                            <label for="quantity">Estoque mín</label>
-                            <input type="number" class="form-control" id="minimum_stock" name="minimum_stock" value="{{ $product->minimum_stock ?? old('minimum_stock') }}">
+                            <label for="minimum_stock">Und. de medida</label>
+                            <input type="text" class="form-control" id="unit" name="unit" value="{{ $product->unit ?? old('unit') }}">
+                        </div>
+                        <div class="form-group">
+                            <label for="minimum_stock">Estoque min</label>
+                            <input type="text" class="form-control" id="minimum_stock" name="minimum_stock" value="{{ $product->minimum_stock ?? old('minimum_stock') }}">
                         </div>
 
                         <div class="form-group">
                             <label for="unit_price">Preço Unitário</label>
-                            <input type="text" class="form-control" id="unit_price" name="unit_price" value="{{ $product->unit_price }}">
+                            <input type="text" class="form-control" id="unit_price" name="unit_price" value="{{ number_format($product->unit_price, 2, ',', '.') }}">
                         </div>
                         <div class="form-group">
                             <label for="expiry_date">Data de Validade</label>
@@ -56,19 +61,32 @@
                             </select>
                         </div>
                         <div class="form-group">
-                            <label for="file">Imagem</label>
+                            <label for="image">Imagem</label>
                             <input type="file" class="form-control" name="image" id="image" onchange="previewImage(event)">
+                            @if($product->image)
+                            <img id="preview" src="{{ asset("build/assets/images/product/{$product->id}/" . $product->image) }}" class="border mt-2" width="300">
+                            @endif
                         </div>
                         <button type="submit" class="btn btn-primary">Salvar</button>
                     </form>
-
-                </div>
-
-                <div class="col-sm-12 col-xl-4">
-                    <img src="" id="image" class="border" alt="" width="300">
                 </div>
             </div>
         </div>
-    </div>
-</div>
-@endsection
+
+        <script>
+            $(document).ready(function() {
+                $('#unit_price').mask('000.000.000.000.000,00', {
+                    reverse: true
+                });
+            });
+
+            function previewImage(event) {
+                var reader = new FileReader();
+                reader.onload = function() {
+                    var output = document.getElementById('preview');
+                    output.src = reader.result;
+                }
+                reader.readAsDataURL(event.target.files[0]);
+            }
+        </script>
+        @endsection

@@ -104,6 +104,13 @@
     <!-- Toastr JS -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
 
+    @if(Session::has('success'))
+        <script>
+            $(document).ready(function() {
+                toastr["success"]("I do not think that means what you think it means.")
+            })
+        </script>
+    @endif
 
     <script>
         $(document).ready(function() {
@@ -113,25 +120,30 @@
                 reverse: true
             });
 
-            /* 
-                    function previewImage(event) {
-                        var reader = new FileReader();
-                        reader.onload = function() {
-                            var output = document.getElementById('image');
-                            output.src = reader.result;
-                        }
-                        reader.readAsDataURL(event.target.files[0]);
-                    } */
+            toastr.options = {
+                "closeButton": false,
+                "debug": false,
+                "newestOnTop": false,
+                "progressBar": false,
+                "positionClass": "toast-top-right",
+                "preventDuplicates": false,
+                "onclick": null,
+                "showDuration": "300",
+                "hideDuration": "1000",
+                "timeOut": "5000",
+                "extendedTimeOut": "1000",
+                "showEasing": "swing",
+                "hideEasing": "linear",
+                "showMethod": "fadeIn",
+                "hideMethod": "fadeOut"
+            }
+            
+            //colorir a div da categoria
+            $('#colorInput').on('input', function() {
+                var color = $(this).val();
+                $('#colorDiv').css('background-color', color);
+            });
 
-            @if(Session::has('success'))
-            toastr.success("{{ Session::get('success') }}");
-            @elseif(Session::has('error'))
-            toastr.error("{{ Session::get('error') }}");
-            @elseif(Session::has('warning'))
-            toastr.warning("{{ Session::get('warning') }}");
-            @elseif(Session::has('info'))
-            toastr.info("{{ Session::get('info') }}");
-            @endif
 
         });
     </script>
