@@ -1,7 +1,9 @@
 <?php
 
-namespace App\Http\Controllers;
 
+namespace App\Http\Controllers\Estoque ;
+
+use App\Http\Controllers\Controller;
 use App\Models\Log;
 use App\Models\Product;
 use Illuminate\Http\Request;
