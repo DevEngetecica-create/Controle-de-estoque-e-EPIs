@@ -2,10 +2,10 @@
 
 use Illuminate\Support\Facades\Route;
 
-use App\Http\Controllers\CategoryController;
-use App\Http\Controllers\SubcategoryController;
-use App\Http\Controllers\ProductController;
-use App\Http\Controllers\BrandController;
+use App\Http\Controllers\Estoque\CategoryController;
+use App\Http\Controllers\Estoque\SubcategoryController;
+use App\Http\Controllers\Estoque\ProductController;
+use App\Http\Controllers\Estoque\BrandController;
 use App\Http\Controllers\LogController;
 use Illuminate\Support\Facades\Auth;
 
