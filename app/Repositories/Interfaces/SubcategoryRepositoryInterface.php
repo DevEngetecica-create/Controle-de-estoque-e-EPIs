@@ -14,4 +14,12 @@ interface SubcategoryRepositoryInterface
     public function update(Subcategory $subcategory, array $data);
     public function delete(Subcategory $subcategory);
 
+     /**
+     * Busca subcategorias por ID de categoria.
+     *
+     * @param int $categoryId
+     * @return \Illuminate\Support\Collection
+     */
+    public function findByCategoryId($categoryId);
+
 }

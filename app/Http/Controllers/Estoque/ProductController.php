@@ -1,7 +1,7 @@
 <?php
 
 
-namespace App\Http\Controllers\Estoque ;
+namespace App\Http\Controllers\Estoque;
 
 use App\Http\Controllers\Controller;
 use App\Models\Log;
@@ -45,6 +45,21 @@ class ProductController extends Controller
         $products = $this->productRepository->paginate(10, $search);
         return view('products.index', compact('products', 'search'));
     }
+
+    public function filterProducts(Request $request)
+    {
+        $brandId = $request->input('brand_id');
+        $categoryId = $request->input('category_id');
+        $subcategoryId = $request->input('subcategory_id');
+
+        $products = $this->productRepository->filter($brandId, $categoryId, $subcategoryId)->paginate(10);
+
+        return response()->json([
+            'products' => $products->items(),
+            'pagination' => (string) $products->links()
+        ]);
+    }
+
 
     /**
      * Show the form for creating a new resource.

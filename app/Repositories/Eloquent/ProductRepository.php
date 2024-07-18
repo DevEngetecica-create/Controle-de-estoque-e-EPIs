@@ -29,11 +29,30 @@ class ProductRepository implements ProductRepositoryInterface
             ->paginate($perPage);
     }
 
+    public function filter($brandId, $categoryId, $subcategoryId)
+    {
+        $query = Product::query();
+
+        if ($brandId) {
+            $query->where('brand_id', $brandId);
+        }
+
+        if ($categoryId) {
+            $query->where('category_id', $categoryId);
+        }
+
+        if ($subcategoryId) {
+            $query->where('subcategory_id', $subcategoryId);
+        }
+
+        return $query->get();
+    }
+
     public function find($id)
     {
         return Product::find($id);
     }
-    
+
 
     public function create(array $data)
     {

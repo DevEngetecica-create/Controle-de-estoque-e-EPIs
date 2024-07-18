@@ -13,6 +13,13 @@ class SubcategoryRepository implements SubcategoryRepositoryInterface
         return Subcategory::all();
     }
 
+    public function findByCategoryId($categoryId)
+    {
+        //dd($categoryId);
+
+        return Subcategory::where('category_id', $categoryId)->get();
+    }
+
     public function find($id)
     {
         return Subcategory::find($id);

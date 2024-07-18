@@ -26,6 +26,10 @@
                     <a href="{{route('brands.index')}}">
                         <button class="btn btn-success mx-3">Subcategorias</button>
                     </a>
+
+                    <a href="{{route('product_entries.index')}}">
+                        <button class="btn btn-success mx-3">Entrada Estoque</button>
+                    </a>
                     
                 </div>
             </div>

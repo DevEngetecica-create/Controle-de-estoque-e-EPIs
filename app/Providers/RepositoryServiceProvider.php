@@ -11,6 +11,8 @@ use App\Repositories\Interfaces\SubcategoryRepositoryInterface;
 use App\Repositories\Interfaces\ProductRepositoryInterface;
 use App\Repositories\Eloquent\ProductRepository;
 use App\Repositories\Interfaces\BrandRepositoryInterface;
+use App\Repositories\Interfaces\ProductEntryRepositoryInterface;
+use App\Repositories\Eloquent\ProductEntryRepository;
 
 class RepositoryServiceProvider extends ServiceProvider
 {
@@ -23,6 +25,7 @@ class RepositoryServiceProvider extends ServiceProvider
         $this->app->bind(SubcategoryRepositoryInterface::class, SubcategoryRepository::class);
         $this->app->bind(ProductRepositoryInterface::class, ProductRepository::class);
         $this->app->bind(BrandRepositoryInterface::class, BrandRepository::class);
+        $this->app->bind(ProductEntryRepositoryInterface::class, ProductEntryRepository::class);
     }
 
     /**

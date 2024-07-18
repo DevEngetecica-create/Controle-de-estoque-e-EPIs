@@ -9,6 +9,7 @@ use App\Models\Log;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Repositories\Interfaces\CategoryRepositoryInterface;
+use App\Repositories\Interfaces\SubcategoryRepositoryInterface;
 
 class CategoryController extends Controller
 {
@@ -16,10 +17,12 @@ class CategoryController extends Controller
      * Display a listing of the resource.
      */
     protected $categoryRepository;
+    protected $subcategoryRepository;
 
-    public function __construct(CategoryRepositoryInterface $categoryRepository)
+    public function __construct(CategoryRepositoryInterface $categoryRepository, SubcategoryRepositoryInterface $subcategoryRepository)
     {
         $this->categoryRepository = $categoryRepository;
+        $this->subcategoryRepository = $subcategoryRepository;
     }
 
     public function index(Request $request)
@@ -29,7 +32,13 @@ class CategoryController extends Controller
         return view('products.categories.index', compact('categories', 'search'));
     }
 
-
+    public function getSubcategories($categoryId)
+    {
+        // dd($categoryId);
+       
+        $subcategories = $this->subcategoryRepository->findByCategoryId($categoryId);
+        return response()->json($subcategories);
+    }
     /**
      * Show the form for creating a new resource.
      */

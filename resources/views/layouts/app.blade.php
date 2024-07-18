@@ -153,6 +153,8 @@
 
             // Inicializa o Select2
             $('#category_id').select2();
+            $('#subcategory_id').select2();
+            $('#brands_id').select2();
 
             
         });
